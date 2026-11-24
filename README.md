@@ -1,5 +1,7 @@
 # Sales Insights – AI Builder build test
 
+**Live:** https://dua-kelinci-test.vercel.app
+
 Web app (React + TypeScript + Vite, installable as a PWA) that reads the sample sales CSV (Sep–Oct 2026, ~1,900 invoice lines) and shows:
 
 1. **Sales by region** and **by brand** (net sales, share of total).
