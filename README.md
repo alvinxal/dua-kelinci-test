@@ -6,6 +6,8 @@ Web app (React + TypeScript + Vite, installable as a PWA) that reads the sample 
 2. **The 5 weakest outlets**, with area, invoice count and a status (stopped ordering / new / down / up / steady).
 3. **A one-paragraph summary** for Telegram (ID/EN), with a copy button.
 
+**Interactive:** the *Data* tab edits rows in place (date, invoice, outlet, brand/SKU, qty, price, discount; net is recomputed), adds and deletes rows, imports/exports CSV and resets to the original. The *Dashboard* tab filters by month, region, brand and outlet type, and lets you change how many weak outlets to show and how they are ranked (lowest total, lowest latest month, biggest drop). Edits persist in the browser (`localStorage`).
+
 Everything runs in the browser, so there is no backend or API key. The CSV is bundled, so the app also works offline once installed. "Use another CSV" loads a different file with the same columns.
 
 ```bash
@@ -32,5 +34,5 @@ npm run build   # production build with service worker
 
 - `src/analyze.ts` – CSV parsing, cleaning, aggregation
 - `src/summary.ts` – Telegram text
-- `src/App.tsx`, `src/styles.css` – UI
+- `src/App.tsx`, `src/DataEditor.tsx`, `src/storage.ts`, `src/styles.css` – UI, row editor, persistence/CSV export
 - `src/analyze.test.ts` – tests

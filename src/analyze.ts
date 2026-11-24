@@ -1,4 +1,5 @@
 export type Row = {
+  id: number; price: number
   date: string; invoice: string; region: string; branch: string
   outletId: string; outletName: string; outletType: string
   salesman: string; brand: string; sku: string; qty: number; net: number; gross: number; discount: number
@@ -48,6 +49,7 @@ export function loadRows(csv: string): { rows: Row[]; cleaning: Cleaning } {
   const cleaning: Cleaning = { rows: 0, duplicates: 0, regionsMerged: 0, namesTrimmed: 0, blankSalesman: 0, returns: 0 }
   const seen = new Set<string>()
   const rows: Row[] = []
+  let nextId = 0
   // Outlet id is the key; the first-seen clean name wins.
   const names = new Map<string, string>()
   for (const r of body) {
@@ -66,6 +68,7 @@ export function loadRows(csv: string): { rows: Row[]; cleaning: Cleaning } {
     const net = n(r, 'net_sales_idr')
     if (net < 0) cleaning.returns++
     rows.push({
+      id: nextId++, price: n(r, 'price_per_carton_idr'),
       date: g(r, 'date'), invoice: g(r, 'invoice_no'), region, branch: g(r, 'branch'),
       outletId, outletName: '', outletType: g(r, 'outlet_type'), salesman: salesman || '(tanpa salesman)',
       brand: g(r, 'brand'), sku: g(r, 'sku'), qty: n(r, 'qty_carton'), net, gross: n(r, 'gross_sales_idr'), discount: n(r, 'discount_idr'),
@@ -94,7 +97,21 @@ export type Insights = {
   byRegion: Slice[]; byBrand: Slice[]; weakest: Outlet[]; momPct: number | null
 }
 
-export function analyze(rows: Row[]): Insights {
+export type Metric = 'total' | 'last' | 'drop'
+export type Filters = { month: string; region: string; brand: string; type: string }
+export const NO_FILTER: Filters = { month: '', region: '', brand: '', type: '' }
+
+export function applyFilters(rows: Row[], f: Filters): Row[] {
+  return rows.filter(r => (!f.month || r.date.startsWith(f.month)) && (!f.region || r.region === f.region) && (!f.brand || r.brand === f.brand) && (!f.type || r.outletType === f.type))
+}
+
+// Keep gross/net consistent after qty, price or discount is edited.
+export function recalc(r: Row): Row {
+  const gross = r.qty * r.price
+  return { ...r, gross, net: gross - r.discount }
+}
+
+export function analyze(rows: Row[], n = 5, metric: Metric = 'total'): Insights {
   const months = [...new Set(rows.map(r => r.date.slice(0, 7)))].sort()
   const m: [string, string] = [months[months.length - 2] ?? months[0] ?? '', months[months.length - 1] ?? '']
   const o = new Map<string, Outlet & { inv: Set<string> }>()
@@ -110,8 +127,9 @@ export function analyze(rows: Row[]): Insights {
     ...x, invoices: inv.size,
     note: x.last === 0 ? 'stopped' : x.prev === 0 ? 'new' : x.last < x.prev * 0.9 ? 'down' : x.last > x.prev * 1.1 ? 'up' : 'flat',
   }))
-  // "Weakest" = lowest total net sales over the whole period; ties broken by fewer invoices.
-  const weakest = [...outlets].sort((a, b) => a.total - b.total || a.invoices - b.invoices).slice(0, 5)
+  // Default "weakest" = lowest total net sales over the period; ties broken by fewer invoices.
+  const key = (x: Outlet) => (metric === 'last' ? x.last : metric === 'drop' ? x.last - x.prev : x.total)
+  const weakest = [...outlets].sort((a, b) => key(a) - key(b) || a.invoices - b.invoices).slice(0, n)
   const prevTotal = rows.filter(r => r.date.startsWith(m[0])).reduce((a, r) => a + r.net, 0)
   const lastTotal = rows.filter(r => r.date.startsWith(m[1])).reduce((a, r) => a + r.net, 0)
   return {

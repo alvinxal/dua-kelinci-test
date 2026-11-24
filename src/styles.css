@@ -67,3 +67,30 @@ small{display:block;font-weight:400;font-size:.75rem;color:var(--muted)}
 .dl{display:inline-flex;align-items:center;min-height:44px;padding:.6rem 1.15rem;border:0;border-radius:999px;background:#fff;color:var(--dkgreen);font-size:.875rem;font-weight:700;cursor:pointer}
 .dl.ghost{background:transparent;color:var(--sub);box-shadow:inset 0 0 0 1.5px currentColor}
 .err{color:var(--head);font-weight:700;margin-top:.75rem}
+
+.logo{width:132px;height:auto}
+.dept{margin:2.5rem 0 0}
+.tabs{display:flex;gap:.5rem;padding-top:1.25rem;padding-bottom:0}
+.tabs button{min-height:44px;padding:.4rem 1.2rem;border:1.5px solid var(--sub);border-radius:999px;background:transparent;color:var(--sub);font-weight:700;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--sub);color:var(--bg)}
+.filters,.controls,.toolbar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;margin:0 0 1.25rem}
+.toolbar{margin-top:1rem}
+.field{display:flex;flex-direction:column;gap:.25rem;font-size:.8125rem;font-weight:700;color:var(--sub);min-width:9rem}
+.field input[type=range]{accent-color:var(--red);min-height:44px}
+.in{min-height:40px;padding:.35rem .6rem;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.875rem;max-width:100%}
+.in.grow{flex:1;min-width:12rem}
+.in.num{text-align:right}.w70{width:70px}.w90{width:105px}
+.dl.solid{background:var(--dkgreen);color:#fff}
+.dl.ghost.danger{color:var(--head)}
+.dl[disabled]{opacity:.45;cursor:default}
+.databox{max-height:32rem;overflow:auto;border:1px solid var(--rule);border-radius:10px}
+table.data{min-width:1100px;font-size:.8125rem}
+table.data th{position:sticky;top:0;z-index:1;white-space:nowrap}
+table.data td{padding:.3rem .4rem;white-space:nowrap;font-weight:400}
+table.data td:first-child{font-weight:400}
+.neg{color:var(--head)}
+.icon{min-width:36px;min-height:36px;border:0;border-radius:8px;background:transparent;color:var(--head);font-size:1rem;cursor:pointer}
+.icon:hover{background:var(--tint-red)}
+.pager{display:flex;gap:1rem;align-items:center;justify-content:center;margin-top:.75rem}
+.foot{border-top:1.5px solid var(--red);padding-top:1.5rem;padding-bottom:3rem}
+.foot img{width:96px;height:auto}

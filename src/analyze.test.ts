@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
-import { analyze, loadRows, normRegion, parseCsv } from './analyze'
+import { analyze, applyFilters, loadRows, NO_FILTER, normRegion, parseCsv, recalc } from './analyze'
 import { telegramSummary } from './summary'
 
 const csv = readFileSync('src/data/sales.csv', 'utf8')
@@ -26,4 +26,22 @@ test('5 weakest, ascending', () => {
   expect(ins.weakest[0].total).toBeLessThanOrEqual(ins.weakest[4].total)
 })
 test('quoted csv fields', () => { expect(parseCsv('a,b\n"x,1",2')).toEqual([['a', 'b'], ['x,1', '2']]) })
-test('summary fits Telegram', () => { expect(telegramSummary(ins, 'id').length).toBeLessThan(1200); console.log(telegramSummary(ins, 'id')); console.log(ins.weakest.map(o => [o.name, o.total, o.invoices, o.note])) })
+test('summary fits Telegram', () => { expect(telegramSummary(ins, 'id').length).toBeLessThan(1200) })
+test('editing qty/price/discount recomputes gross and net', () => {
+  const r = recalc({ ...rows[0], qty: 10, price: 100000, discount: 50000 })
+  expect(r.gross).toBe(1000000)
+  expect(r.net).toBe(950000)
+})
+test('filters narrow the data and the ranking size/metric are adjustable', () => {
+  const jb = applyFilters(rows, { ...NO_FILTER, region: 'Jawa Barat' })
+  expect(jb.length).toBeGreaterThan(0)
+  expect(jb.every(r => r.region === 'Jawa Barat')).toBe(true)
+  expect(analyze(rows, 10).weakest).toHaveLength(10)
+  const drop = analyze(rows, 5, 'drop').weakest
+  expect(drop[0].last - drop[0].prev).toBeLessThanOrEqual(drop[4].last - drop[4].prev)
+  expect(analyze(applyFilters(rows, { ...NO_FILTER, month: '2026-10' })).momPct).toBeNull()
+})
+test('adding a row changes the totals', () => {
+  const extra = recalc({ ...rows[0], id: 99999, invoice: 'NEW-1', qty: 1, price: 1000000, discount: 0 })
+  expect(analyze([...rows, extra]).total).toBe(ins.total + 1000000)
+})
