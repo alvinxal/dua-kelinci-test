@@ -45,3 +45,14 @@ test('adding a row changes the totals', () => {
   const extra = recalc({ ...rows[0], id: 99999, invoice: 'NEW-1', qty: 1, price: 1000000, discount: 0 })
   expect(analyze([...rows, extra]).total).toBe(ins.total + 1000000)
 })
+
+import { answer, QUESTIONS } from './chat'
+test('chat answers every template question from the data', () => {
+  const ctx = { ins, rows, lang: 'id' as const, filtered: false, cleaning }
+  for (const q of QUESTIONS) expect(answer(q.id, ctx).length).toBeGreaterThan(10)
+  expect(answer('weak', ctx)).toContain(ins.weakest[0].name)
+  expect(answer('region', ctx)).toContain(ins.byRegion[0].name)
+  expect(answer('clean', ctx)).toContain('3 baris duplikat')
+  expect(answer('trend', { ...ctx, lang: 'en' })).toContain('2026-10')
+  expect(answer('total', { ...ctx, rows: [], ins: analyze([]) })).toContain('Belum ada data')
+})

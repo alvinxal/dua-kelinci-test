@@ -34,6 +34,7 @@ npm run build   # production build with service worker
 
 - `src/analyze.ts` – CSV parsing, cleaning, aggregation
 - `src/summary.ts` – Telegram text
+- Chat popup (bottom-right): template questions answered by rules from the data on screen, no LLM.
 - Theme: light by default, night mode via the toggle (saved in the browser). Icons: Font Awesome 5 Free (SVG).
 - `src/App.tsx`, `src/DataEditor.tsx`, `src/storage.ts`, `src/styles.css` – UI, row editor, persistence/CSV export
 - `src/analyze.test.ts` – tests

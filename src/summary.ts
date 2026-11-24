@@ -1,7 +1,7 @@
 import type { Insights } from './analyze'
 import type { Lang } from './i18n'
 
-const idr = (n: number, l: Lang) => {
+export const idr = (n: number, l: Lang) => {
   const a = Math.abs(n)
   const f = (v: number, u: string) => `Rp${v.toLocaleString(l === 'id' ? 'id-ID' : 'en-US', { maximumFractionDigits: 1 })} ${u}`
   return a >= 1e9 ? f(n / 1e9, l === 'id' ? 'miliar' : 'bn') : f(n / 1e6, l === 'id' ? 'juta' : 'mn')

@@ -94,7 +94,7 @@ export type Outlet = {
 
 export type Insights = {
   months: [string, string]; total: number; invoices: number; outlets: number
-  byRegion: Slice[]; byBrand: Slice[]; weakest: Outlet[]; momPct: number | null
+  byRegion: Slice[]; byBrand: Slice[]; weakest: Outlet[]; all: Outlet[]; momPct: number | null
 }
 
 export type Metric = 'total' | 'last' | 'drop'
@@ -134,7 +134,7 @@ export function analyze(rows: Row[], n = 5, metric: Metric = 'total'): Insights 
   const lastTotal = rows.filter(r => r.date.startsWith(m[1])).reduce((a, r) => a + r.net, 0)
   return {
     months: m, total: rows.reduce((a, r) => a + r.net, 0), invoices: new Set(rows.map(r => r.invoice)).size, outlets: outlets.length,
-    byRegion: groupSum(rows, r => r.region), byBrand: groupSum(rows, r => r.brand), weakest,
+    byRegion: groupSum(rows, r => r.region), byBrand: groupSum(rows, r => r.brand), weakest, all: outlets,
     momPct: m[0] !== m[1] && prevTotal ? (lastTotal - prevTotal) / prevTotal : null,
   }
 }

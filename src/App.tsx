@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import raw from './data/sales.csv?raw'
+import Chat from './Chat'
 import DataEditor from './DataEditor'
 import { analyze, applyFilters, loadRows, NO_FILTER, type Filters, type Metric, type Row, type Slice } from './analyze'
 import { T, type Lang } from './i18n'
@@ -64,7 +65,8 @@ export default function App() {
     return { months: u(r => r.date.slice(0, 7)), regions: u(r => r.region), brands: u(r => r.brand), types: u(r => r.outletType) }
   }, [rows])
 
-  const ins = useMemo(() => analyze(applyFilters(rows, filters), n, metric), [rows, filters, n, metric])
+  const filteredRows = useMemo(() => applyFilters(rows, filters), [rows, filters])
+  const ins = useMemo(() => analyze(filteredRows, n, metric), [filteredRows, n, metric])
   const summary = ins.total || ins.outlets ? telegramSummary(ins, lang) : ''
   const filtered = Object.values(filters).some(Boolean)
   const setF = (k: keyof Filters) => (v: string) => setFilters(f => ({ ...f, [k]: v }))
@@ -193,6 +195,7 @@ export default function App() {
           </>
         )}
       </main>
+      <Chat ins={ins} rows={filteredRows} lang={lang} filtered={filtered} cleaning={original.cleaning} />
       <footer className="wrap foot"><img src="/logo-red.png" alt="Dua Kelinci" width="96" height="58" /></footer>
     </>
   )
