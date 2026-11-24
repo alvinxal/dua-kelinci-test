@@ -98,3 +98,35 @@ table.data td:first-child{font-weight:400}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr));gap:0 3rem}
 .databox{max-height:70vh}
 .tabs{margin-bottom:1.25rem}
+
+/* spacing pass */
+.tabs{margin-bottom:0;padding-top:1.75rem;padding-bottom:1.5rem}
+main{padding-top:0}
+.filters{margin:0 0 2rem;padding:1rem 1.25rem;background:var(--tint-green);border-radius:12px}
+.filters .field{min-width:10rem}
+.filters .in{min-width:10rem}
+.stats{margin-bottom:2.5rem}
+.toolbar{margin:0 0 1rem;gap:.75rem}
+.toolbar + .muted{margin:0 0 1rem}
+.pager{margin:1.25rem 0 2rem}
+.databox{margin-bottom:0}
+main h3{margin-top:2rem}
+.controls{margin-bottom:1rem}
+
+/* data table alignment */
+table.data td{vertical-align:middle;padding:.35rem .5rem}
+table.data th{padding:.6rem .5rem}
+table.data td .in{width:100%}
+table.data td .in.w70,table.data td .in.w90{width:100%;min-width:70px}
+table.data td.num{padding-right:1rem;font-variant-numeric:tabular-nums}
+table.data th.num{padding-right:1rem}
+table.data{table-layout:auto;min-width:1200px}
+.toolbar{align-items:center}
+table.data td:nth-child(1) .in{min-width:150px}
+table.data td:nth-child(2) .in{min-width:110px}
+table.data td:nth-child(3) .in{min-width:250px}
+table.data td:nth-child(4) .in{min-width:180px}
+table.data td:nth-child(5) .in{min-width:230px}
+table.data td:nth-child(6) .in{min-width:70px;width:80px}
+table.data td:nth-child(7) .in,table.data td:nth-child(8) .in{min-width:110px;width:120px}
+table.data{min-width:1300px}

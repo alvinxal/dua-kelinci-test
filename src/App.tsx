@@ -39,7 +39,7 @@ export default function App() {
   const [lang, setLang] = useState<Lang>(() => { try { return (localStorage.getItem('lang') as Lang) || 'id' } catch { return 'id' } })
   const [rows, setRowsState] = useState<Row[]>(() => loadSaved() ?? original.rows)
   const [edited, setEdited] = useState(() => loadSaved() !== null)
-  const [tab, setTab] = useState<'dash' | 'data'>('dash')
+  const [tab, setTab] = useState<'dash' | 'data'>(() => (location.hash === '#data' ? 'data' : 'dash'))
   const [filters, setFilters] = useState<Filters>(NO_FILTER)
   const [n, setN] = useState(5)
   const [metric, setMetric] = useState<Metric>('total')
