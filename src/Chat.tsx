@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments, faPaperPlane, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faComments, faPaperPlane, faRedo, faTimes } from '@fortawesome/free-solid-svg-icons'
 import type { Insights, Row } from './analyze'
 import { answer, QUESTIONS, type QId } from './chat'
 import type { Lang } from './i18n'
@@ -14,6 +14,7 @@ export default function Chat({ ins, rows, lang, filtered, cleaning }: Props) {
   const [open, setOpen] = useState(() => location.hash === '#chat')
   const [msgs, setMsgs] = useState<Msg[]>([{ from: 'bot', text: hello }])
   const [busy, setBusy] = useState(false)
+  const [asked, setAsked] = useState<QId[]>([])
   const end = useRef<HTMLDivElement>(null)
 
   useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs, open, busy])
@@ -27,6 +28,7 @@ export default function Chat({ ins, rows, lang, filtered, cleaning }: Props) {
   function ask(q: QId, label: string) {
     if (busy) return
     setMsgs(m => [...m, { from: 'me', text: label }])
+    setAsked(a => [...a, q])
     setBusy(true)
     // Answer is computed when sent, from the data on screen at that moment.
     const text = answer(q, { ins, rows, lang, filtered, cleaning })
@@ -47,10 +49,15 @@ export default function Chat({ ins, rows, lang, filtered, cleaning }: Props) {
             <div ref={end} />
           </div>
           <div className="chat-chips">
-            {QUESTIONS.map(q => {
+            {QUESTIONS.filter(q => !asked.includes(q.id)).map(q => {
               const label = id ? q.id_ : q.en
               return <button key={q.id} className="chip" disabled={busy} onClick={() => ask(q.id, label)}><FontAwesomeIcon icon={faPaperPlane} /> {label}</button>
             })}
+            {asked.length === QUESTIONS.length && !busy && (
+              <button className="chip" onClick={() => { setAsked([]); setMsgs([{ from: 'bot', text: hello }]) }}>
+                <FontAwesomeIcon icon={faRedo} /> {id ? 'Semua sudah ditanyakan. Ulangi percakapan' : 'All asked. Start over'}
+              </button>
+            )}
           </div>
         </section>
       )}
