@@ -38,9 +38,9 @@ export default function Chat({ ins, rows, lang, filtered, cleaning }: Props) {
   return (
     <>
       {open && (
-        <section className="chat" role="dialog" aria-label={id ? 'Tanya data' : 'Ask the data'}>
+        <section className="chat" role="dialog" aria-label={id ? 'Tanya Data' : 'Ask Data'}>
           <header className="chat-head">
-            <b>{id ? 'Tanya data' : 'Ask the data'}</b>
+            <b>{id ? 'Tanya Data' : 'Ask Data'}</b>
             <button className="icon light" onClick={() => setOpen(false)} aria-label={id ? 'Tutup' : 'Close'}><FontAwesomeIcon icon={faTimes} /></button>
           </header>
           <div className="chat-body" aria-live="polite">
@@ -63,6 +63,7 @@ export default function Chat({ ins, rows, lang, filtered, cleaning }: Props) {
       )}
       <button className="chat-fab" onClick={() => setOpen(o => !o)} aria-label={id ? 'Buka chat' : 'Open chat'} aria-expanded={open}>
         <FontAwesomeIcon icon={open ? faTimes : faComments} />
+        <span>{open ? (id ? 'Tutup' : 'Close') : (id ? 'Tanya Data' : 'Ask Data')}</span>
       </button>
     </>
   )
