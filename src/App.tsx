@@ -134,8 +134,10 @@ export default function App() {
                   <div className="stat"><b>{ins.outlets}</b><span>{t.outlets}</span></div>
                 </section>
 
-                <section><h2>{t.region}</h2><Bars data={ins.byRegion} l={lang} /></section>
-                <section><h2>{t.brand}</h2><Bars data={ins.byBrand} l={lang} /></section>
+                <div className="grid2">
+                  <section><h2>{t.region}</h2><Bars data={ins.byRegion} l={lang} /></section>
+                  <section><h2>{t.brand}</h2><Bars data={ins.byBrand} l={lang} /></section>
+                </div>
 
                 <section>
                   <h2>{ins.weakest.length} {t.weak.toLowerCase()}</h2>

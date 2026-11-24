@@ -14,7 +14,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html{background:var(--red)}
 body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.6 Manrope,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
-.wrap{max-width:760px;margin:0 auto;padding:0 1.5rem}
+.wrap{width:100%;max-width:none;margin:0;padding:0 clamp(1.25rem,4vw,3.5rem)}
 button,label{font:inherit}
 button:focus-visible,label:focus-within{outline:3px solid var(--green);outline-offset:3px;border-radius:6px}
 
@@ -94,3 +94,7 @@ table.data td:first-child{font-weight:400}
 .pager{display:flex;gap:1rem;align-items:center;justify-content:center;margin-top:.75rem}
 .foot{border-top:1.5px solid var(--red);padding-top:1.5rem;padding-bottom:3rem}
 .foot img{width:96px;height:auto}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr));gap:0 3rem}
+.databox{max-height:70vh}
+.tabs{margin-bottom:1.25rem}
