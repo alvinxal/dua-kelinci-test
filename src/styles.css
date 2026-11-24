@@ -141,3 +141,16 @@ body,.in,.tag,.test{transition:background-color .2s,color .2s}
 
 .dl svg{margin-right:.5rem}
 .theme svg{width:1.1em;height:1.1em}
+
+/* aligned controls row */
+.controls{align-items:flex-start;gap:1.5rem}
+.controls .field span{min-height:1.25rem;line-height:1.25rem}
+.controls .field input[type=range],.controls .field .in{height:44px;min-height:44px;margin:0}
+.controls .field input[type=range]{width:12rem;padding:0}
+
+/* stats as three equal cards */
+.stats{border:0;gap:1rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+.stat,.stat+.stat{padding:1.25rem 1rem;background:var(--tint-green);border-radius:14px;text-align:center}
+.stat span{display:block;margin-top:.15rem}
+@media (max-width:520px){.stats{gap:.5rem}.stat,.stat+.stat{padding:1rem .5rem}}
+@media (max-width:520px){.filters .field{flex:1 1 100%}.filters .in,.controls .in{width:100%}.controls .field{flex:1 1 100%}.controls input[type=range]{width:100%!important}}
