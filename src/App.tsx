@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import raw from './data/sales.csv?raw'
 import DataEditor from './DataEditor'
 import { analyze, applyFilters, loadRows, NO_FILTER, type Filters, type Metric, type Row, type Slice } from './analyze'
@@ -45,8 +47,13 @@ export default function App() {
   const [metric, setMetric] = useState<Metric>('total')
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => { try { return localStorage.getItem('theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' } })
   const t = T[lang]
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try { localStorage.setItem('theme', theme) } catch { /* ignore */ }
+  }, [theme])
   useEffect(() => { document.documentElement.lang = lang }, [lang])
   const setL = (l: Lang) => { setLang(l); try { localStorage.setItem('lang', l) } catch { /* ignore */ } }
 
@@ -86,8 +93,13 @@ export default function App() {
         <div className="wrap">
           <div className="top">
             <img className="logo" src="/logo-white.png" alt="Dua Kelinci" width="132" height="80" />
-            <div className="langs" role="group" aria-label="Language">
-              {(['id', 'en'] as const).map(l => <button key={l} aria-pressed={lang === l} onClick={() => setL(l)}>{l.toUpperCase()}</button>)}
+            <div className="top-actions">
+              <button className="theme" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label={theme === 'light' ? t.toDark : t.toLight} title={theme === 'light' ? t.toDark : t.toLight}>
+                <FontAwesomeIcon icon={theme === 'light' ? faMoon : faSun} />
+              </button>
+              <div className="langs" role="group" aria-label="Language">
+                {(['id', 'en'] as const).map(l => <button key={l} aria-pressed={lang === l} onClick={() => setL(l)}>{l.toUpperCase()}</button>)}
+              </div>
             </div>
           </div>
           <p className="kicker dept">{t.kicker}</p>

@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { recalc, type Row } from './analyze'
 import type { Lang } from './i18n'
 import { T } from './i18n'
@@ -46,7 +48,7 @@ export default function DataEditor({ rows, setRows, lang }: { rows: Row[]; setRo
     <section>
       <div className="toolbar">
         <input type="search" className="in grow" placeholder={t.search} value={query} onChange={e => { setQuery(e.target.value); setPage(0) }} aria-label={t.search} />
-        <button className="dl solid" onClick={add}>＋ {t.addRow}</button>
+        <button className="dl solid" onClick={add}><FontAwesomeIcon icon={faPlus} /> {t.addRow}</button>
       </div>
       <p className="muted">{t.rowsCount(shown.length, rows.length)}</p>
       <div className="tablebox databox">
@@ -79,7 +81,7 @@ export default function DataEditor({ rows, setRows, lang }: { rows: Row[]; setRo
                 <td><input className="in num w90" type="number" min="0" value={r.price} onChange={e => patch(r.id, { price: num(e.target.value) })} aria-label={t.price} /></td>
                 <td><input className="in num w90" type="number" min="0" value={r.discount} onChange={e => patch(r.id, { discount: num(e.target.value) })} aria-label={t.discount} /></td>
                 <td className="num"><b className={r.net < 0 ? 'neg' : ''}>{r.net.toLocaleString(lang === 'id' ? 'id-ID' : 'en-US')}</b></td>
-                <td><button className="icon" onClick={() => setRows(rs => rs.filter(x => x.id !== r.id))} aria-label={t.del} title={t.del}>✕</button></td>
+                <td><button className="icon" onClick={() => setRows(rs => rs.filter(x => x.id !== r.id))} aria-label={t.del} title={t.del}><FontAwesomeIcon icon={faTimes} /></button></td>
               </tr>
             ))}
           </tbody>
